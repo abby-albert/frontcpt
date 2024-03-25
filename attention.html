@@ -50,7 +50,7 @@ function calculateProbability() {
   resultElement.innerHTML = "Probability of getting a score above 9.0: " + probability.toFixed(2) + "%";
 }
 </script>
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -80,7 +80,7 @@ function calculateProbability() {
             var attention = document.getElementById("attentionInput").value;
             var solutions = parseInt(document.getElementById("solutionsInput").value);
 
-            // Load and process CSV data
+            // Example data
             var data = [
     { subject: 0, attention: 'focused', solutions: 0, score: 8.2 },
     { subject: 1, attention: 'divided', solutions: 2, score: 9.5 },
