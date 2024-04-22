@@ -96,7 +96,6 @@
     </div>
 </div>
 <script>
-    // JavaScript to save log entries to local storage and display weekly log
     document.getElementById("save-button").addEventListener("click", function () {
         const name = document.getElementById("name").value;
         const game = document.getElementById("game").value;
@@ -108,29 +107,38 @@
                 game: game,
                 score: score,
             };
-            const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
-            highScores.push(entry);
-            localStorage.setItem("highScores", JSON.stringify(highScores));
-            // Clear input fields
-            document.getElementById("name").value = "";
-            document.getElementById("game").value = "";
-            document.getElementById("score").value = "";
-            displayHighScores();
-            alert("Entry logged successfully!");
+            fetch("/save_high_score", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(entry)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                displayHighScores();
+            })
+            .catch(error => console.error("Error:", error));
         } else {
             alert("Please fill in all fields.");
         }
     });
+
     function displayHighScores() {
-        const highScores = JSON.parse(localStorage.getItem("highScores")) || [];
-        const tableBody = document.getElementById("log-body");
-        tableBody.innerHTML = ""; // Clear previous entries
-        highScores.forEach(entry => {
-            const row = tableBody.insertRow();
-            row.insertCell().textContent = entry.name;
-            row.insertCell().textContent = entry.game;
-            row.insertCell().textContent = entry.score;
-        });
+        fetch("/get_high_scores")
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.getElementById("log-body");
+            tableBody.innerHTML = ""; // Clear previous entries
+            data.forEach(entry => {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = entry.name;
+                row.insertCell().textContent = entry.game;
+                row.insertCell().textContent = entry.score;
+            });
+        })
+        .catch(error => console.error("Error:", error));
     }
     displayHighScores();
 </script>
