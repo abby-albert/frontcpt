@@ -1,157 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Signup Page</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css"> <!-- Include the compiled CSS file -->
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f0f0f0; /* Set your desired background color */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+</head>
+<body>
+    <h1>User Signup</h1>
+    <form id="signup-form">
+        <label for="username">Username:</label>
+        <input type="text" id="username" required><br><br>
 
-    .login-container {
-      width: 300px; /* Adjust width as needed */
-      padding: 20px;
-      background-color: #fff; /* Set your desired background color */
-      border-radius: 8px; /* Add rounded corners if desired */
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
-    }
+        <label for="password">Password:</label>
+        <input type="password" id="password" required><br><br>
 
-    .login-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+        <button type="submit">Sign Up</button>
+    </form>
 
-    .login-container form {
-      text-align: center;
-    }
-
-    .login-container p {
-      margin-bottom: 15px;
-    }
-
-    .login-container button {
-      padding: 10px 20px;
-      border: none;
-      background-color: #007bff; /* Set your desired button color */
-      color: #fff; /* Set text color */
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    .login-container button:hover {
-      background-color: #0056b3; /* Set hover color */
-    }
-  </style>
-<head>
+    <div id="message"></div>
     <script>
-        //import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
-    
-        function signUp_user() {
-            const enteredName = document.getElementById("name").value;
-            const enteredUid = document.getElementById("uid").value;
-            const enteredPassword = document.getElementById("password").value;
-            const enteredDOB = document.getElementById("dob").value;
-            console.log("Name = " + enteredName)
-            console.log("Uid = " + enteredUid)
-            console.log("Password = " + enteredPassword)
-            console.log("dob = " + enteredDOB)
-            const signupHeaders = new Headers();
-          signupHeaders.set('111', '222');
-          
-          signupHeaders.set("Accept", "*/*");
-          signupHeaders.set("Accept-Language", "en-US,en;q=0.9");
-          signupHeaders.set("Content-Type", "application/json");
-    
-            signUp_api(enteredName, enteredUid, enteredPassword, enteredDOB)
+        document.getElementById("signup-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
             
-          }
-        
-    
-        function signUp_api(name, uid, pw, dob){
-          let signupHeaders = new Headers();
-          signupHeaders.append('111', '222');
-          
-          signupHeaders.append("Accept", "*/*");
-          signupHeaders.append("Accept-Language", "en-US,en;q=0.9");
-          signupHeaders.append("Content-Type", "application/json");
-          
-    
-          var raw = JSON.stringify({
-              "name" : name,
-              "uid": uid,
-              "password": pw,
-              "dob": dob
-            });
-    
-          var requestOptions = {
-              method: 'POST',
-              headers: signupHeaders,
-              body: raw,
-              redirect: 'follow'
+            // Get form data
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Create data object
+            const data = {
+                uid: username,
+                password: password
             };
-    
-          fetch("http://localhost:8086/api/users/", requestOptions)
-              .then(response => {
+
+            // Send POST request to backend
+            fetch("/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
                 if (response.ok) {
-                    console.log("Successfully Signed Up");
-                    alert("Account has been created. You will be directed to login page shortly.");
-                    window.location.href = "http://127.0.0.1:4200/student//2024/01/23/chemicalmerge.html"
-                  } else {
-                    console.error("Sign Up Failed");
-                    // You can handle failed login attempts here
-                    const errorMessageDiv = document.getElementById('errorMessage');
-                    errorMessageDiv.innerHTML = '<label style="color: red;">User Sign Up Failed</label>';
-                  }
-              })
-              .then(result => { 
-                console.log(result);
-                
-                })
-              .catch(error => console.log('error', error));
-              
-    
-          
-          //return response
-        }
-    
-    
-      </script>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Login Page</title>
-      <link rel="stylesheet" href="styles.css"> <!-- Include the compiled CSS file -->
-    </head>
-    
-    <body>
-        <div class="container">
-        <form action="javascript:signUp_user()">
-        <p><label for="Name">First Name:</label>
-         <input type="text" id="name" placeholder="Your First Name" />
-        </p>
-        <p><label for="uid">User ID:</label> 
-        <input type="text" id="uid" placeholder="User ID" />
-        </p>
-        <p><label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Password" />
-        </p>
-        <p><label for="dob">Date Of Birth:</label>
-        <input type="text" id="dob" placeholder="Date of Birth (YYYY-MM-DD)" />
-        </p>
-        <button type="button" class="button-spacing" onclick="signUp_user()">Submit</button>
-          <button onClick = "window.location.href ='http://127.0.0.1:4100/games.html'" class="button-spacing" >Sign Up</button>
-        </form>
-      </div>
-       
-    
-       
-    </body>
-    
-    </html>
+                    // Display success message
+                    document.getElementById("message").innerHTML = "User registered successfully";
+                } else {
+                    throw new Error("Failed to register user");
+                }
+            })
+            .catch(error => {
+                // Display error message
+                document.getElementById("message").innerHTML = "Error: " + error.message;
+            });
+        });
+    </script>
+</body>
